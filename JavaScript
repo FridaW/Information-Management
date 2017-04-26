@@ -1,0 +1,289 @@
+function loadData(){
+if(!localStorage.getItem('data'))
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+      if (this.readyState == 4 && this.status == 200 ){
+          //read json data from response text
+          var jsonData = JSON.parse(this.responseText);
+          //check local storage
+          var retrieveObject = localStorage.getItem('data');
+          if (!retrieveObject){
+              localStorage.setItem('data', JSON.stringify((jsonData)));
+          }
+          else{
+              jsonData = JSON.parse(retrieveObject);
+          }
+          createTable(jsonData);
+          return this.responseText;
+        };
+
+    };
+    xhttp.open("GET","json.json", true);
+    xhttp.send();
+    }
+    else{
+    var retrieveObject = localStorage.getItem('data');
+    jsonData = JSON.parse(retrieveObject);
+    createTable(jsonData);
+    }
+
+};
+
+function createTable(data){
+
+    var table = document.getElementById('myTable');
+    while (table.rows.length > 1){
+        table.deleteRow(1);
+    };
+    for (var obj in data){
+      //  var x = document.createElement("TR");
+                //x.setAttribute("id", '"+count+"');
+        //var y = document.getElementById('x');
+        var table = document.getElementById("myTable");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+
+
+        cell1.innerHTML = data[obj].name;
+        cell2.innerHTML = data[obj].phone;
+        cell3.innerHTML = data[obj].location;
+        cell4.innerHTML = data[obj].email;
+        cell5.innerHTML = ' <input class= "view" type="button" value="view"/><input class="edit" type="button" value="edit"/><input  class="btnDelete" type="button" value="delete"  />';
+
+
+          //     alert("the row index is" +row_index);
+         //var x = document.createElement("TR");
+        // x.setAttribute("id", '"+count"');
+        // var target = document.getElementById(id);
+        // target.innerHTML = "+count";
+    };
+
+};
+
+
+function insertIntoTable(obj){
+    var len = document.getElementById("myTable").rows.length;
+
+    //var x = document.createElement("TR");
+ //   x.setAttribute("id", '"+count+"');
+
+    var table = document.getElementById('myTable');
+    var row = table.insertRow(-1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+
+
+
+    cell1.innerHTML = obj.name;
+    cell2.innerHTML = obj.phone;
+    cell3.innerHTML = obj.location;
+    cell4.innerHTML = obj.email;
+    cell5.innerHTML = ' <input class= "view" type="button" value="view"/><input class="edit" type="button" value="edit"/><input  class="btnDelete" type="button" value="delete"  />';
+    //alert("the row index is" +row_index);
+
+
+};
+
+function validateForm(){
+    var name = document.getElementById("name").value;
+    var phone = document.getElementById("phone").value;
+    var location = document.getElementById("location").value;
+    var email = document.getElementById("email").value;
+    var valid = true;
+    if (name ==""){
+        if(document.getElementById('name_err'))
+            document.getElementById('name_err').remove();
+        document.getElementById("name").insertAdjacentHTML('afterend','<span id="name_err">Name must be entered</span>');
+        valid = false;
+    }else if(document.getElementById('name_err')){
+          document.getElementById('name_err').remove();
+    }
+
+    if (phone ==""){
+            valid = false;
+            if(document.getElementById('phone_err'))
+                        document.getElementById('phone_err').remove();
+            document.getElementById("phone").insertAdjacentHTML('afterend','<span id="phone_err">Phone must be entered</span>');
+        } else if(isNaN(phone)){
+            valid = false;
+            if(document.getElementById('phone_err'))
+                                    document.getElementById('phone_err').remove();
+            document.getElementById("phone").insertAdjacentHTML('afterend','<span id="phone_err">Phone must be in valid format</span>');
+        }else if(document.getElementById('phone_err')){
+            document.getElementById('phone_err').remove();
+        };
+
+    if (location ==""){
+        valid = false;
+        if(document.getElementById('location_err'))
+            document.getElementById('location_err').remove();
+        document.getElementById("location").insertAdjacentHTML('afterend','<span id = "location_err">Location must be entered</span>');
+    }else if(document.getElementById('location_err')){
+        document.getElementById('location_err').remove();
+    };
+
+    var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email ==""){
+        valid = false;
+        if(document.getElementById('email_err'))
+                                document.getElementById('email_err').remove();
+        document.getElementById("email").insertAdjacentHTML('afterend','<span id = "email_err">Email must be entered</span>');
+    } else if (!email.match(emailformat)) {
+            valid = false;
+            if(document.getElementById('email_err'))
+                    document.getElementById('email_err').remove();
+            document.getElementById("email").insertAdjacentHTML('afterend','<span id="email_err">Email should be in valid format</span>');
+    }else if (document.getElementById('email_err')){
+            document.getElementById('email_err').remove();
+    };
+
+
+
+    if (valid == true){
+      submitInfo();
+    }
+};
+
+
+function submitInfo() {
+    var name = document.getElementById("name").value;
+    var phone = document.getElementById("phone").value;
+    var location = document.getElementById("location").value;
+    var email = document.getElementById("email").value;
+
+    obj = {name:name,phone:phone,location:location,email:email};
+    //document.write(obj.name);
+
+    insertIntoTable(obj)
+
+    var retrieveObject = localStorage.getItem('data');
+    jsondata = JSON.parse(retrieveObject);
+    //jsondata is an array.
+    jsondata.push(obj);
+    localStorage.setItem('data',JSON.stringify(jsondata))
+    again();
+}
+
+function deleteRow(){
+
+//   $(".btnDelete").click(function(){
+        var rowIndex = $(this)
+        .closest('tr') // Get the closest tr parent element
+        .prevAll() // Find all sibling elements in front of it
+        .length;
+       // var myid = $(this).attr("id")
+       // alert(myid)
+       console.log(jQuery(this).parent());
+       console.log(rowIndex);
+       jQuery(this).closest('tr').remove();
+       deleteInfo(rowIndex-1);
+      //     })
+};
+
+function deleteInfo(rowInfo){
+    var retrieveObject = localStorage.getItem('data');
+    jsondata = JSON.parse(retrieveObject);
+    jsondata.splice(rowInfo,1);
+    localStorage.setItem('data',JSON.stringify(jsondata))
+
+}
+
+function view(){
+//$(document).ready(function(){
+ //    $(".view").click(function(){
+    if ($(this).closest('tr').next().attr('class') == "add"){
+         $(this).closest('tr').next().remove();
+    }else{
+            var txt = $(this).closest('tr').text();
+           // alert(txt)
+            $(this).closest('tr').after(
+                 "<tr class='add'>" +
+                   "<td colspan='10'>"+txt+"</td>" +
+                   "</tr>"
+             );
+    }
+};
+
+$("#content").keyup(function(){
+    $("#content").css("background-color","lavenderblush");
+        $('#myTable tr').each(function(){
+              if ($(this).text().toLowerCase().indexOf($("#content").val().toLowerCase()) === -1)
+                     $(this).hide();
+                             else
+                                  $(this).show();
+
+      });
+   });
+
+function editRow(){
+    var rowIndex = $(this).closest('tr').prevAll().length;
+    var retrieveObject = localStorage.getItem('data');
+    var jsondata = JSON.parse(retrieveObject);
+    var obj = jsondata[rowIndex-1];
+    console.log(obj);
+   //got the data then put into the form
+   // jQuery('#INFO').show();
+    jQuery('#name').val(obj.name);
+    jQuery('#phone').val(obj.phone);
+    jQuery('#location').val(obj.location);
+    jQuery('#email').val(obj.email);
+    editFormIndex = rowIndex-1
+    jQuery('#infoForm').show()
+
+}
+
+function update(){
+    var name = jQuery('#name').val();
+    var phone = jQuery('#phone').val();
+    var location = jQuery('#location').val();
+    var email = jQuery('#email').val();
+
+    console.log(name);
+    var obj = {name:name,phone:phone,location:location,email:email};
+    console.log(obj);
+
+    var retrieveObject = localStorage.getItem('data');
+    var jsondata = JSON.parse(retrieveObject);
+    //jsondata is an array.
+    console.log(editFormIndex);
+    jsondata[editFormIndex]= obj;
+    console.log(jsondata);
+    localStorage.setItem('data',JSON.stringify(jsondata))
+    createTable(jsondata);
+    //jQuery('#infoForm').hide()
+    formClear();
+    again();
+
+}
+
+function again(){
+    jQuery('.btnDelete').click(deleteRow);
+    jQuery('.edit').click(editRow);
+    jQuery('.view').click(view);
+};
+
+$(document).ready(function(){
+    jQuery('.btnDelete').click(deleteRow);
+    jQuery('.edit').click(editRow);
+    jQuery('.view').click(view);
+})
+
+function formClear() {
+  $("#name").val("");
+  $("#phone").val("");
+  $("#location").val("");
+  $("#email").val("");
+};
+
+
+loadData();
+
