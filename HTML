@@ -1,0 +1,64 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <h1>Information From</h1>
+</head>
+<body>
+<div class="container" >
+    <h2>The Form</h2>
+    <div class="row ">
+        <div class="col-md-10" style="background-color:lavenderblush;">
+            <form name="myForm" id="infoForm">
+                <div class="form-group">
+                    <label for="formInput1">Name:</label>
+                    <input type="text" class="form-control"  id = "name" name="fname" placeholder="Enter Name"/>
+                </div>
+                <div class="form-group">
+                    <label for="formInput2">Phone:</label>
+                    <input type="text" class="form-control" id = "phone" name="fphone" placeholder="Enter Phone"/>
+                </div>
+                <div class="form-group">
+                    <label for="formInput3">Location:</label>
+                    <input type="text" class="form-control" id = "location" name="flocation" placeholder="Enter Location"/>
+                </div>
+                <div class="form-group">
+                    <label for="formInput4">Email:</label>
+                    <input type="text" class="form-control" id = "email" name="femail" placeholder="Enter Email">
+                </div>
+                <button type="button" onclick="validateForm()"/>submit</button>
+                <button type="button" onclick="update()">Update</button>
+
+            </form>
+
+        </div>
+    </div>
+    <div class="col-md-10">
+        <table class="table" id="myTable" style="background-color:lavenderblush;"/>
+        <h2>The Table</h2>
+        <div class="col-md-10">
+            <p id="mySearch" > Search<input type = "text" id="content"/> </p>
+        </div>
+        <thead>
+        <tr ><th>Name</th><th>Phone</th><th>Location</th><th>Email</th><th>Operation</th></tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+
+        </table>
+
+    </div>
+    <br />
+
+
+</div>
+
+</body>
+<script src="script.js"></script>
+</html>
